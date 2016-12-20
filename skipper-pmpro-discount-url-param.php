@@ -50,7 +50,7 @@ function removeDiscountCode($discount_code) {
               // Using moment.js to figure out how long we have until the cookie expires
               expires = moment(expires).fromNow();
               // Replacing the default message with one explaining how long we have left
-              $('head').append("<style>.replace-pmpro-message:after{ content:'Your discount has been applied! It will expire " + expires + ", or until you exit your browser.' }</style>");
+              $('head').append("<style>.replace-pmpro-message:after{ content:'Your discount has been applied! It will expire " + expires + ".' }</style>");
               // Clearing and Hiding the Discount Code Fields
               console.log('Discount Code Check Passed');
               $('#other_discount_code, #discount_code').val( "" );
