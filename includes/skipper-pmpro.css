@@ -1,0 +1,33 @@
+.replace-pmpro-message{
+  visibility: hidden;
+  position: relative;
+}
+.replace-pmpro-message:after {
+  visibility: visible;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /*content: "Your discount has been applied! It will be available for the next 4 hours, as long as you don't close your browser.";*/
+  background-color: #d9edf7;
+  border: 1px solid #bce8f1;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  color: #31708f;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5em;
+  margin: .5em 0;
+  padding: 10px 15px;
+  width: 100%;
+}
+.pmpro_success.replace-pmpro-message:after {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d;
+}
+.pmpro_error.replace-pmpro-message:after {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a94442;
+}
