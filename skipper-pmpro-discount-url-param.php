@@ -27,22 +27,6 @@ function removeDiscountCode($discount_code) {
         </script>
         <script>
             console.log('Discount Code Check Passed');
-            
-            //Check to see if a discount cookie exists, and if so, apply it to the page.
-            function getCookie(cname) {
-                var name = cname + "=";
-                var ca = document.cookie.split(';');
-                for(var i = 0; i < ca.length; i++) {
-                    var c = ca[i];
-                    while (c.charAt(0) == ' ') {
-                        c = c.substring(1);
-                    }
-                    if (c.indexOf(name) == 0) {
-                        return c.substring(name.length, c.length);
-                    }
-                }
-                return "";
-            }
 
             // If this was successful, let's add our own message to #pmpro_message
             jQuery('#pmpro_message').addClass('replace-pmpro-message');
@@ -59,8 +43,8 @@ function removeDiscountCode($discount_code) {
             // Clearing and Hiding the Discount Code Fields
             jQuery('#other_discount_code, #discount_code').val( "" );
             jQuery('#pmpro_level_cost p:first-of-type, #other_discount_code_p, .pmpro_payment-discount-code').hide();
-
-    <?php } else { ?>
+            <?php
+    } else { ?>
 
             jQuery('#pmpro_message').removeClass('replace-pmpro-message');
             console.log('Discount Code Check Failed');
