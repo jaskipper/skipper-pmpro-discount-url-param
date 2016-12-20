@@ -15,59 +15,57 @@ function register_skipper_pmpro_url_includes() {
     wp_register_script( 'pmprojs', plugins_url('includes/skipper-pmpro.js', __FILE__), array('jquery') );
     wp_register_style( 'pmprocss', plugins_url('includes/skipper-pmpro.css', __FILE__), false, '1.0.0', 'all');
 }
-
 // use the registered jquery and style above
 add_action('wp_enqueue_scripts', 'enqueue_skipper_pmpro_url_includes');
 function enqueue_skipper_pmpro_url_includes(){
    wp_enqueue_script('pmprojs');
    wp_enqueue_style( 'pmprocss' );
 }
-
 function removeDiscountCode($discount_code) {
-    if ( pmpro_checkDiscountCode($discount_code) ) {
-      ?>
+    if ( pmpro_checkDiscountCode($discount_code) ) { ?>
+        // add new script tag for dev viewability
         </script>
         <script>
-          function getCookie(cname) {
-              var name = cname + "=";
-              var ca = document.cookie.split(';');
-              for(var i = 0; i < ca.length; i++) {
-                  var c = ca[i];
-                  while (c.charAt(0) == ' ') {
-                      c = c.substring(1);
-                  }
-                  if (c.indexOf(name) == 0) {
-                      return c.substring(name.length, c.length);
-                  }
-              }
-              return "";
-          }
-          jQuery(function($) {
-              // If this was successful, let's add our own message to #pmpro_message
-              $('#pmpro_message').addClass('replace-pmpro-message');
-              // Let's get the expires cookie so that we can tell the user how long they have
-              var expires = getCookie("discountexpires");
-              // Using moment.js to figure out how long we have until the cookie expires
-              expires = moment(expires).fromNow();
-              // Replacing the default message with one explaining how long we have left
-              $('head').append("<style>.replace-pmpro-message:after{ content:'Your discount has been applied! It will expire " + expires + ".' }</style>");
-              // Clearing and Hiding the Discount Code Fields
-              console.log('Discount Code Check Passed');
-              $('#other_discount_code, #discount_code').val( "" );
-              $('#pmpro_level_cost p:first-of-type, #other_discount_code_p, .pmpro_payment-discount-code').hide();
-          });
-        </script>
-      <?php
-    } else {
-      ?>
-      <script>
-        jQuery(function($) {
-            $('#pmpro_message').removeClass('replace-pmpro-message');
-              console.log('Discount Code Check Failed');
-        });
-      </script>
-      <?php
-    }
+            console.log('Discount Code Check Passed');
+            
+            //Check to see if a discount cookie exists, and if so, apply it to the page.
+            function getCookie(cname) {
+                var name = cname + "=";
+                var ca = document.cookie.split(';');
+                for(var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
 
-}
+            // If this was successful, let's add our own message to #pmpro_message
+            jQuery('#pmpro_message').addClass('replace-pmpro-message');
+
+            // Let's get the expires cookie so that we can tell the user how long they have
+            var expires = getCookie("discountexpires");
+
+            // Using moment.js to figure out how long we have until the cookie expires
+            expires = moment(expires).fromNow();
+
+            // Replacing the default message with one explaining how long we have left
+            jQuery('head').append("<style>.replace-pmpro-message:after{ content:'Your discount has been applied! It will expire " + expires + ".' }</style>");
+
+            // Clearing and Hiding the Discount Code Fields
+            jQuery('#other_discount_code, #discount_code').val( "" );
+            jQuery('#pmpro_level_cost p:first-of-type, #other_discount_code_p, .pmpro_payment-discount-code').hide();
+
+    <?php } else { ?>
+
+            jQuery('#pmpro_message').removeClass('replace-pmpro-message');
+            console.log('Discount Code Check Failed');
+        </script>
+    <?php }
+} // end of function
 add_action( 'pmpro_applydiscountcode_return_js', 'removeDiscountCode' );
+?>

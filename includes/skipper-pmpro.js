@@ -30,15 +30,9 @@ jQuery(function($) {
       var discount = getCookie("discount");
       if (discount != "") {
         if ( $('#other_discount_code').val() == "") {
-          console.log('The cookie is: ' + discount);
           $('#other_discount_code').val( discount );
           $('#other_discount_code_button').click();
-        } else {
-          console.log('There was another code in the discount code field.');
-          console.log( $('#other_discount_code').val() );
         }
-      } else {
-        console.log('No cookies');
       }
   }
 
@@ -81,11 +75,10 @@ jQuery(function($) {
               // Remove the URL Parameter
               removeParam('disc');
           }
-          // Show the cookies in the console
-          console.log(document.cookie);
           checkCookie();
-      }// pmpro pages
 
-    }); //Document Ready
+      } // pmpro pages
 
-}); //jQuery
+    }); // Document Ready
+
+}); // jQuery
