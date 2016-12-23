@@ -1,4 +1,4 @@
-//Get discount code from url paramater
+//Get discount code from url parameter
 function urlParam(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results==null){
@@ -51,48 +51,53 @@ function removeParam(parameter) {
     return url;
 }
 
+function set_cookie(name, value, expires) {
+  document.cookie = name +'='+ value +'; expires=' + expires + '; Path=/;';
+  console.log(name +'='+ value +'; expires=' + expires + '; Path=/;');
+}
+function delete_cookie(name) {
+  document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
 jQuery(function($) {
   $( document ).ready(function() {
 
-      if ($('body').is('.pmpro-checkout, .pmpro-level')){
+      if ($('body').is('.membership-checkout, .pmpro-level')){
 
-          //If there is a discount code in the URL, reset the cookie and set a new one
-          var discparam = urlParam('disc');
-          console.log(discparam);
-          if ( typeof discparam != "undefined" && discparam != null ) {
-              console.log("inside of function");
-              // If there is a urlParam disc, let's refresh the cookie and set a new expires time
-              document.cookie = "discount=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-              document.cookie = "discountexpires=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+          // Check URL for the disc Parameter
+          if ( urlParam('disc') ) {
 
               // Get the URL Parameter disc
               var disc = urlParam('disc');
+              console.log(disc);
 
-              // Set the Expires time to Midnight
-              var midnight = new Date();
-              midnight.setHours(23,59,59,0);
+              // Set the Expires time to 4 hours ahead
+              var cookieDate = moment().add(4, 'hours');
+              var cookieDateUTC = cookieDate.toDate().toUTCString();
+              var cookieDateISO = cookieDate.toISOString();
+              console.log(cookieDate);
 
               // Set the new cookies
-              document.cookie = "discount=" + disc + "; expires=" + midnight + "; path=/";
-
-              //Make an Expires Cookie too
-              document.cookie = "discountexpires=" + midnight + "; expires=" + midnight + "; path=/";
+              delete_cookie('discount');
+              delete_cookie('discountexpires');
+              set_cookie('discount', disc, cookieDateUTC);
+              set_cookie('discountexpires', cookieDateISO, cookieDateUTC);
 
               // Remove the URL Parameter
               removeParam('disc');
+
+
           }
-          var discount = checkCookie('discount');
+
           console.log(document.cookie);
-          console.log(discount)
-          if ( typeof discount != "undefined" && discount != null ) {
-            if ( $('#other_discount_code').val() == "" ) {
-              console.log("inside");
+          if ( checkCookie('discount') && $('#other_discount_code').val() == "" ) {
+              var discount = checkCookie('discount');
               $('#other_discount_code').val( discount );
               $('#other_discount_code_button').click();
-            }
           }
 
       } // pmpro pages
+      console.log('working');
 
     }); // Document Ready
 

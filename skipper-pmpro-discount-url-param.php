@@ -26,6 +26,7 @@ function removeDiscountCode($discount_code) {
         // add new script tag for dev viewability
         </script>
         <script>
+          if (checkCookie('discount')) {
             console.log('Discount Code Check Passed');
 
             // If this was successful, let's add our own message to #pmpro_message
@@ -35,7 +36,7 @@ function removeDiscountCode($discount_code) {
             var expires = getCookie("discountexpires");
 
             // Using moment.js to figure out how long we have until the cookie expires
-            expires = moment(expires).fromNow();
+            expires = moment.utc(expires).fromNow();
 
             // Replacing the default message with one explaining how long we have left
             jQuery('head').append("<style>.replace-pmpro-message:after{ content:'Your discount has been applied! It will expire " + expires + ".' }</style>");
@@ -43,6 +44,16 @@ function removeDiscountCode($discount_code) {
             // Clearing and Hiding the Discount Code Fields
             jQuery('#other_discount_code, #discount_code').val( "" );
             jQuery('#pmpro_level_cost p:first-of-type, #other_discount_code_p, .pmpro_payment-discount-code').hide();
+
+            // Add a clear button after
+            jQuery("#pmpro_level_cost").after('<button type="button" class="btn btn-primary cleardiscount">Clear Discount</button>');
+            
+            jQuery('.cleardiscount').click(function() {
+                delete_cookie('discount');
+                delete_cookie('discountexpires');
+                location.reload();
+            })
+          }
             <?php
     } else { ?>
 
